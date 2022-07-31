@@ -5,6 +5,7 @@
 #           1.3.0 remove forbid_char, support '^' and '~'
 #           1.3.5 some small modifications
 #           1.3.6 automatically copy to clipboard
+#           1.3.7 optimized color display for short string
 import os
 import pyperclip
 
@@ -39,10 +40,13 @@ class RainbowText:
         self.__rainbowText += "$"
         strlen = len(self.__origText)
         colors = len(self.__rainbowColors)
-        
+        k = 1
+        if strlen < 9:
+            k = 3
+            
         for i in range(strlen):
             self.__rainbowText += (self.__prefix +
-                                   self.__rainbowColors[i % colors] +
+                                   self.__rainbowColors[k * i % colors] +
                                    self.__joint +
                                    self.__mathpref[mathrm])
 
