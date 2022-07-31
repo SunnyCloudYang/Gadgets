@@ -8,7 +8,7 @@
 \color{#f42700}{\mathrm{i}}
 \color{#e94f00}{\mathrm{k}}
 \color{#dd7700}{\mathrm{e}}
-\color{#d29f00}{\mathrm{\ }}
+\color{#d29f00}{\mathrm{\ }}\
 \color{#b6b800}{\mathrm{t}}
 \color{#88c400}{\mathrm{h}}
 \color{#5bcf00}{\mathrm{i}}
