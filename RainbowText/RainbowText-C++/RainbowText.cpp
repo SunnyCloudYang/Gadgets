@@ -5,7 +5,7 @@
 * @version : 1.0.0 add a forbidden char '~', fixed some bugs
              1.2.0 supported char '^' and '~', supported auto-linefeed
              1.5.0 supported autocopy to clipboard
-             1.5.1 optimized color display for short strings
+             1.5.1 optimized color display for short string
 */
 #include <iostream>
 #include <string>
