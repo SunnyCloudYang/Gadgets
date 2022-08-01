@@ -7,15 +7,15 @@
 ## 目录
 
 * RainbowText - Generates rainbow color text by LaTeX format $\color{#ff0000}{\mathrm{l}}
-\color{#f42700}{\mathrm{i}}
-\color{#e94f00}{\mathrm{k}}
-\color{#dd7700}{\mathrm{e}}
-\color{#d29f00}{\mathrm{\ }}\
-\color{#b6b800}{\mathrm{t}}
-\color{#88c400}{\mathrm{h}}
-\color{#5bcf00}{\mathrm{i}}
-\color{#2ddb00}{\mathrm{s}}
-\color{#00e600}{\mathrm{.}}$
+\color{#e94f00}{\mathrm{i}}
+\color{#d29f00}{\mathrm{k}}
+\color{#5bcf00}{\mathrm{e}}
+\color{#00e600}{\mathrm{\ }}
+\color{#00cf5b}{\mathrm{t}}
+\color{#00b8b6}{\mathrm{h}}
+\color{#0077dd}{\mathrm{i}}
+\color{#0027f4}{\mathrm{s}}
+\color{#6600f4}{\mathrm{.}}$
 * To be added...
 
 ## 参与贡献
