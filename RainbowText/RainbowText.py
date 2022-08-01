@@ -6,12 +6,13 @@
 #           1.3.5 some small modifications
 #           1.3.6 automatically copy to clipboard
 #           1.3.7 optimized color display for short string
+#           1.4.0 support auto linefeed, left-aligned
 import os
 import pyperclip
 
 # global str variable
 YourRainbowText = ""
-
+version = "version 1.4.0"
 
 class RainbowText:
 
@@ -37,14 +38,20 @@ class RainbowText:
         self.__origText = inputText
 
     def rainbow(self, mathrm=1) -> str:
+        line_size = 29
         self.__rainbowText += "$"
         strlen = len(self.__origText)
         colors = len(self.__rainbowColors)
         k = 1
         if strlen < 9:
             k = 3
-            
+        if strlen > line_size:
+            self.__rainbowText += "\\begin{align}\n&"
+
         for i in range(strlen):
+            if (i % line_size == 0) & (i != 0):
+                self.__rainbowText += "\\\\&"
+                
             self.__rainbowText += (self.__prefix +
                                    self.__rainbowColors[k * i % colors] +
                                    self.__joint +
@@ -57,14 +64,16 @@ class RainbowText:
             self.__rainbowText += self.__postfix[mathrm] + "\n"
 
         else:
-            self.__rainbowText += "$"
-            
+            if strlen > line_size:
+                self.__rainbowText += "\\end{align}\n"
+            self.__rainbowText = self.__rainbowText[:-1] + "$"
+
         return self.__rainbowText
 
-
-YourRainbowText = input("Your text to be rainbowed: ")
+print(version)
+YourRainbowText = input("\nYour text to be rainbowed: ")
 mathrm = int(input("Enable mathrm?(1/0): "))
-print("--------Rainbow Text Code Begin--------")
+print("\n--------Rainbow Text Code Begin--------")
 print(RainbowText(YourRainbowText).rainbow(mathrm))
 print("---------Rainbow Text Code End---------")
 pyperclip.copy(RainbowText(YourRainbowText).rainbow(mathrm))
