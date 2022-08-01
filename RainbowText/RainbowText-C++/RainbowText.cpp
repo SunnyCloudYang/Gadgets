@@ -5,17 +5,21 @@
 * @version : 1.0.0 add a forbidden char '~', fixed some bugs
              1.2.0 supported char '^' and '~', supported auto-linefeed
              1.5.0 supported autocopy to clipboard
-             1.5.1 optimized color display for short string
+             1.5.1 optimized color display for short string, add "k"
+             1.5.5 optimized color display for short string, adjust "k"
+             1.5.6 keep rainbowing text until press Enter
 */
 #include <iostream>
 #include <string>
+#include <cmath>
 #include <vector>
 #include <algorithm>
 #include <windows.h>
 using namespace std;
 
-const string prefix = "\\color{";
-const string joint = "}{";
+const string VERSION = "version 1.5.6";
+const string PREFIX = "\\color{";
+const string JOINT = "}{";
 const string postfix[2] = {"}", "}}"};
 const string math_pref[2] = {"", "\\mathrm{"};
 vector<string> colors = {"#ff0000", "#f42700", "#e94f00", "#dd7700",
@@ -27,7 +31,7 @@ vector<string> colors = {"#ff0000", "#f42700", "#e94f00", "#dd7700",
                          "#ee0099", "#f40066", "#fa0033"};
 vector<char> esc_char = {' ', '\\', '{', '}', '#', '$', '%', '&', '_'};
 const char ctrl_char[2] = {'^', '~'};
-const int line_size = 29;
+const int LINE_SIZE = 29;
 
 string RainbowText(string origin_text, bool mathrm);
 void AddToCpy(string str);
@@ -38,52 +42,56 @@ int main()
     string rainbow_text;
     string cmathrm;
     int mathrm = 1;
-
+    cout << VERSION << endl;
     cout << "Your text: ";
     getline(cin, origin_text);
-
-    cout << "Enable mathrm?(y/n): ";
-    getline(cin, cmathrm);
-
-    if (cmathrm == "n" || cmathrm == "N")
+    while (origin_text.length() != 0)
     {
-        mathrm = 0;
-    }
+        cout << "Enable mathrm?(y/n): ";
+        getline(cin, cmathrm);
 
-    rainbow_text = RainbowText(origin_text, mathrm);
-    cout << "----------Rainbow text code begin----------" << endl;
-    cout << rainbow_text << endl;
-    cout << "-----------Rainbow text code end-----------" << endl;
-    AddToCpy(rainbow_text);
-    cin.get();
+        if (cmathrm == "n" || cmathrm == "N")
+        {
+            mathrm = 0;
+        }
+
+        rainbow_text = RainbowText(origin_text, mathrm);
+        cout << "----------Rainbow text code begin----------" << endl;
+        cout << rainbow_text << endl;
+        cout << "-----------Rainbow text code end-----------" << endl;
+        AddToCpy(rainbow_text);
+        cin.get();
+        cout << "\nYour text(Enter to exit): ";
+        getline(cin, origin_text);
+    }
     return 0;
 }
 
 string RainbowText(string origin_text, bool mathrm)
 {
+    const int STRLEN = origin_text.length();
     string rainbow_text = "$";
+
     float k = 1.0;
-    if (origin_text.length() > line_size)
+    if (STRLEN < colors.size())
     {
-        rainbow_text += "\\begin{aligned}\n&";
-    }
-    if (origin_text.length() < 9)
-    {
-        k = 3.0;
+        k = 16 * pow(STRLEN, -0.866);
     }
 
-    for (int i = 0; i < origin_text.length(); i++)
+    if (STRLEN > LINE_SIZE)
     {
-        if (!(i % line_size) && i != 0)
+        rainbow_text += "\\begin{aligned}\n&";    
+    }
+
+    for (int i = 0; i < STRLEN; i++)
+    {
+        if (!(i % LINE_SIZE) && i != 0)
         {
             rainbow_text += "\\\\&";
         }
 
-        rainbow_text += prefix + colors[int(k * i) % colors.size()] +
-                        joint + math_pref[mathrm];
-
-        auto Finder = [origin_text, i](char c) -> bool
-        { return origin_text[i] == c; };
+        rainbow_text += PREFIX + colors[int(k * i + 0.5) % colors.size()] +
+                        JOINT + math_pref[mathrm];
 
         if (origin_text[i] == ctrl_char[0])
         {
@@ -95,6 +103,8 @@ string RainbowText(string origin_text, bool mathrm)
         }
         else
         {
+            auto Finder = [origin_text, i](char c) -> bool
+            { return origin_text[i] == c; };
             if (any_of(esc_char.begin(), esc_char.end(), Finder))
             {
                 rainbow_text += "\\";
@@ -103,7 +113,7 @@ string RainbowText(string origin_text, bool mathrm)
         }
         rainbow_text += postfix[mathrm] + "\n";
     }
-    if (origin_text.length() > line_size)
+    if (STRLEN > LINE_SIZE)
     {
         rainbow_text += "\\end{aligned}\n";
     }
