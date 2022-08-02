@@ -1,14 +1,16 @@
 /**
 * @author : GoodNullName
 * @note : input your words, choose the format,
-    and copy the output to where supports md &LaTeX
+    and copy the output to where supports markdown&LaTeX
 * @version : 1.0.0 add a forbidden char '~', fixed some bugs
              1.2.0 supported char '^' and '~', supported auto-linefeed
              1.5.0 supported autocopy to clipboard
              1.5.1 optimized color display for short string, add "k"
              1.5.5 optimized color display for short string, adjust "k"
              1.5.6 keep rainbowing text until press Enter
+             1.6.0 support Chinese characters(inavailable with g++)
 */
+#define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <string>
 #include <cmath>
@@ -17,34 +19,37 @@
 #include <windows.h>
 using namespace std;
 
-const string VERSION = "version 1.5.6";
-const string PREFIX = "\\color{";
-const string JOINT = "}{";
-const string postfix[2] = {"}", "}}"};
-const string math_pref[2] = {"", "\\mathrm{"};
-vector<string> colors = {"#ff0000", "#f42700", "#e94f00", "#dd7700",
-                         "#d29f00", "#b6b800", "#88c400", "#5bcf00",
-                         "#2ddb00", "#00e600", "#00db2d", "#00cf5b",
-                         "#00c488", "#00b8b6", "#009fd2", "#0077dd",
-                         "#004fe9", "#0027f4", "#0000ff", "#3300fa",
-                         "#6600f4", "#9900ee", "#cc00e9", "#e900cc",
-                         "#ee0099", "#f40066", "#fa0033"};
-vector<char> esc_char = {' ', '\\', '{', '}', '#', '$', '%', '&', '_'};
-const char ctrl_char[2] = {'^', '~'};
+const string VERSION = "version 1.6.0";
+const wstring PREFIX = L"\\color{";
+const wstring JOINT = L"}{";
+const wstring postfix[2] = {L"}", L"}}"};
+const wstring math_pref[2] = {L"", L"\\mathrm{"};
+vector<wstring> colors = {L"#ff0000", L"#f42700", L"#e94f00", L"#dd7700",
+                          L"#d29f00", L"#b6b800", L"#88c400", L"#5bcf00",
+                          L"#2ddb00", L"#00e600", L"#00db2d", L"#00cf5b",
+                          L"#00c488", L"#00b8b6", L"#009fd2", L"#0077dd",
+                          L"#004fe9", L"#0027f4", L"#0000ff", L"#3300fa",
+                          L"#6600f4", L"#9900ee", L"#cc00e9", L"#e900cc",
+                          L"#ee0099", L"#f40066", L"#fa0033"};
+vector<wchar_t> esc_char = {' ', '\\', '{', '}', '#', '$', '%', '&', '_'};
+const wchar_t ctrl_char[2] = {'^', '~'};
 const int LINE_SIZE = 29;
 
-string RainbowText(string origin_text, bool mathrm);
-void AddToCpy(string str);
+wstring RainbowText(wstring origin_text, bool mathrm);
+void AddToCpy(wstring str);
 
 int main()
 {
-    string origin_text;
-    string rainbow_text;
+    locale loc(".936");
+    wcin.imbue(loc);
+    wcout.imbue(loc);
+    wstring origin_text;
+    wstring rainbow_text;
     string cmathrm;
     int mathrm = 1;
     cout << VERSION << endl;
     cout << "Your text: ";
-    getline(cin, origin_text);
+    getline(wcin, origin_text);
     while (origin_text.length() != 0)
     {
         cout << "Enable mathrm?(y/n): ";
@@ -57,20 +62,20 @@ int main()
 
         rainbow_text = RainbowText(origin_text, mathrm);
         cout << "----------Rainbow text code begin----------" << endl;
-        cout << rainbow_text << endl;
+        wcout << rainbow_text << endl;
         cout << "-----------Rainbow text code end-----------" << endl;
         AddToCpy(rainbow_text);
         cin.get();
         cout << "\nYour text(Enter to exit): ";
-        getline(cin, origin_text);
+        getline(wcin, origin_text);
     }
     return 0;
 }
 
-string RainbowText(string origin_text, bool mathrm)
+wstring RainbowText(wstring origin_text, bool mathrm)
 {
     const int STRLEN = origin_text.length();
-    string rainbow_text = "$";
+    wstring rainbow_text = L"$";
 
     float k = 1.0;
     if (STRLEN < colors.size())
@@ -80,14 +85,14 @@ string RainbowText(string origin_text, bool mathrm)
 
     if (STRLEN > LINE_SIZE)
     {
-        rainbow_text += "\\begin{aligned}\n&";    
+        rainbow_text += L"\\begin{aligned}\n&";
     }
 
     for (int i = 0; i < STRLEN; i++)
     {
         if (!(i % LINE_SIZE) && i != 0)
         {
-            rainbow_text += "\\\\&";
+            rainbow_text += L"\\\\&";
         }
 
         rainbow_text += PREFIX + colors[int(k * i + 0.5) % colors.size()] +
@@ -95,11 +100,11 @@ string RainbowText(string origin_text, bool mathrm)
 
         if (origin_text[i] == ctrl_char[0])
         {
-            rainbow_text += "\\wedge";
+            rainbow_text += L"\\wedge";
         }
         else if (origin_text[i] == ctrl_char[1])
         {
-            rainbow_text += "\\sim";
+            rainbow_text += L"\\sim";
         }
         else
         {
@@ -107,31 +112,31 @@ string RainbowText(string origin_text, bool mathrm)
             { return origin_text[i] == c; };
             if (any_of(esc_char.begin(), esc_char.end(), Finder))
             {
-                rainbow_text += "\\";
+                rainbow_text += L"\\";
             }
             rainbow_text += origin_text[i];
         }
-        rainbow_text += postfix[mathrm] + "\n";
+        rainbow_text += postfix[mathrm] + L"\n";
     }
     if (STRLEN > LINE_SIZE)
     {
-        rainbow_text += "\\end{aligned}\n";
+        rainbow_text += L"\\end{aligned}\n";
     }
-    rainbow_text[rainbow_text.length() - 1] = '$';
+    rainbow_text[rainbow_text.length() - 1] = L'$';
     return rainbow_text;
 }
 
-void AddToCpy(string str)
+void AddToCpy(wstring str)
 {
     HGLOBAL hClip;
     if (OpenClipboard(NULL))
     {
         EmptyClipboard(); // relax, it won't clear all, just current content
-        hClip = GlobalAlloc(GMEM_MOVEABLE, str.length() + 1);
-        char *buff = (char *)GlobalLock(hClip);
-        strcpy(buff, str.c_str());
+        hClip = GlobalAlloc(GMEM_MOVEABLE, (str.length() + 1) * sizeof(wchar_t));
+        wchar_t *buff = (wchar_t *)GlobalLock(hClip);
+        wcscpy(buff, str.c_str());
         GlobalUnlock(hClip);
-        SetClipboardData(CF_TEXT, hClip);
+        SetClipboardData(CF_UNICODETEXT, hClip);
         CloseClipboard();
         cout << "Already copied to the clipboard.";
     }
