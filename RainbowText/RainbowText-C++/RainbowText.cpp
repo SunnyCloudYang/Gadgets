@@ -9,6 +9,7 @@
              1.5.5 optimized color display for short string, adjust "k"
              1.5.6 keep rainbowing text until press Enter
              1.6.0 support Chinese characters(inavailable with g++)
+             1.6.1 catch err when zn-CN.936 is not supported
 */
 #define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
@@ -19,7 +20,7 @@
 #include <windows.h>
 using namespace std;
 
-const string VERSION = "version 1.6.0";
+const string VERSION = "version 1.6.1";
 const wstring PREFIX = L"\\color{";
 const wstring JOINT = L"}{";
 const wstring postfix[2] = {L"}", L"}}"};
@@ -40,14 +41,24 @@ void AddToCpy(wstring str);
 
 int main()
 {
-    locale loc(".936");
-    wcin.imbue(loc);
-    wcout.imbue(loc);
+    cout << VERSION << endl;
+    
+    try
+    {
+        locale loc(".936");
+        wcin.imbue(loc);
+        wcout.imbue(loc);
+    }
+    catch(const std::exception& e)
+    {
+        std::cerr << e.what() << '\n';
+        std::cout << "Sorry, seems that Chinese is not supported by this compiler." << "\n\n";
+    }
+
     wstring origin_text;
     wstring rainbow_text;
     string cmathrm;
     int mathrm = 1;
-    cout << VERSION << endl;
     cout << "Your text: ";
     getline(wcin, origin_text);
     while (origin_text.length() != 0)
