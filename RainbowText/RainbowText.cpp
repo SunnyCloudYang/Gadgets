@@ -1,7 +1,7 @@
 /**
 * @author : GoodNullName
 * @note : input your words, choose the format,
-    and copy the output to where supports markdown&LaTeX
+    and paste the output to where supports markdown&LaTeX
 * @version : 1.0.0 add a forbidden char '~', fixed some bugs
              1.2.0 supported char '^' and '~', supported auto-linefeed
              1.5.0 supported autocopy to clipboard
