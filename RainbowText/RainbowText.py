@@ -7,12 +7,13 @@
 #           1.3.6 automatically copy to clipboard
 #           1.3.7 optimized color display for short string
 #           1.4.0 support auto linefeed, left-aligned
+#           1.5.0 support Chinese and keep rainbowing until meet empty string
 import os
 import pyperclip
 
 # global str variable
 YourRainbowText = ""
-version = "version 1.4.0"
+version = "version 1.5.0"
 
 class RainbowText:
 
@@ -27,10 +28,9 @@ class RainbowText:
                        "#004fe9", "#0027f4", "#0000ff", "#3300fa",
                        "#6600f4", "#9900ee", "#cc00e9", "#e900cc",
                        "#ee0099", "#f40066", "#fa0033")
-    __esc = {" ": "\\ ", "\\": "\\\\", "{": "\\{",
-             "}": "\\}", "#": "\\#", "$": "\\$",
-             "%": "\\%", "&": "\\&", "_": "\\_",
-             "^": "\\wedge", "~": "\\sim"}
+    __esc = {" ": "\\ ", "\\": "\\\\",    "{": "\\{",  "}": "\\}",
+             "#": "\\#",  "$": "\\$",     "%": "\\%",  "&": "\\&",
+             "_": "\\_",  "^": "\\wedge", "~": "\\sim"}
     __origText = ""
     __rainbowText = ""
 
@@ -40,11 +40,13 @@ class RainbowText:
     def rainbow(self, mathrm=1) -> str:
         line_size = 29
         self.__rainbowText += "$"
+        
         strlen = len(self.__origText)
         colors = len(self.__rainbowColors)
         k = 1
-        if strlen < 9:
-            k = 3
+        
+        if strlen < colors - 3:
+            k = 16 * strlen ** -0.87
         if strlen > line_size:
             self.__rainbowText += "\\begin{align}\n&"
 
@@ -53,7 +55,7 @@ class RainbowText:
                 self.__rainbowText += "\\\\&"
                 
             self.__rainbowText += (self.__prefix +
-                                   self.__rainbowColors[k * i % colors] +
+                                   self.__rainbowColors[int(k * i + 0.5) % colors] +
                                    self.__joint +
                                    self.__mathpref[mathrm])
 
@@ -72,10 +74,12 @@ class RainbowText:
 
 print(version)
 YourRainbowText = input("\nYour text to be rainbowed: ")
-mathrm = int(input("Enable mathrm?(1/0): "))
-print("\n--------Rainbow Text Code Begin--------")
-print(RainbowText(YourRainbowText).rainbow(mathrm))
-print("---------Rainbow Text Code End---------")
-pyperclip.copy(RainbowText(YourRainbowText).rainbow(mathrm))
-print("Already copied to clipboard.")
-input()
+while len(YourRainbowText) != 0:
+    YourRainbowText.encode("GBK")
+    mathrm = int(input("Enable mathrm?(1/0): "))
+    print("\n--------Rainbow Text Code Begin--------")
+    print(RainbowText(YourRainbowText).rainbow(mathrm))
+    print("---------Rainbow Text Code End---------")
+    pyperclip.copy(RainbowText(YourRainbowText).rainbow(mathrm))
+    print("Already copied to clipboard.")
+    YourRainbowText = input("\nYour text to be rainbowed: ")
