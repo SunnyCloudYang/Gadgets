@@ -10,6 +10,7 @@
              1.5.6 keep rainbowing text until press Enter
              1.6.0 support Chinese characters(inavailable with g++)
              1.6.1 catch err when zn-CN.936 is not supported
+             1.6.2 cancel copy confirm
 */
 #define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
@@ -20,7 +21,7 @@
 #include <windows.h>
 using namespace std;
 
-const string VERSION = "version 1.6.1";
+const string VERSION = "version 1.6.2";
 const wstring PREFIX = L"\\color{";
 const wstring JOINT = L"}{";
 const wstring postfix[2] = {L"}", L"}}"};
@@ -76,7 +77,6 @@ int main()
         wcout << rainbow_text << endl;
         cout << "-----------Rainbow text code end-----------" << endl;
         AddToCpy(rainbow_text);
-        cin.get();
         cout << "\nYour text(Enter to exit): ";
         getline(wcin, origin_text);
     }
