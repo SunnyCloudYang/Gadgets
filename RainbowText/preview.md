@@ -75,4 +75,34 @@ $\color{#ff0000}{\mathrm{彩}}
 \color{#0077dd}{\mathrm{成}}
 \color{#0027f4}{\mathrm{彩}}
 \color{#3300fa}{\mathrm{虹}}
-\color{#6600f4}{\mathrm{屁}}$
+\color{#6600f4}{\mathrm{屁}}$<br>
+$\color{#ff0000}{\mathrm{a}}
+\color{#f42700}{\mathrm{b}}
+\color{#e94f00}{\mathrm{c}}
+\color{#dd7700}{\mathrm{d}}
+\color{#d29f00}{\mathrm{e}}
+\color{#b6b800}{\mathrm{f}}
+\color{#88c400}{\mathrm{g}}
+\color{#5bcf00}{\mathrm{\ }}
+\color{#2ddb00}{\mathrm{h}}
+\color{#00e600}{\mathrm{i}}
+\color{#00db2d}{\mathrm{j}}
+\color{#00cf5b}{\mathrm{k}}
+\color{#00c488}{\mathrm{l}}
+\color{#00b8b6}{\mathrm{m}}
+\color{#009fd2}{\mathrm{n}}
+\color{#0077dd}{\mathrm{\ }}
+\color{#004fe9}{\mathrm{o}}
+\color{#0027f4}{\mathrm{p}}
+\color{#0000ff}{\mathrm{q}}
+\color{#3300fa}{\mathrm{\ }}
+\color{#6600f4}{\mathrm{r}}
+\color{#9900ee}{\mathrm{s}}
+\color{#cc00e9}{\mathrm{t}}
+\color{#e900cc}{\mathrm{\ }}
+\color{#ee0099}{\mathrm{u}}
+\color{#f40066}{\mathrm{v}}
+\color{#fa0033}{\mathrm{w}}
+\color{#ff0000}{\mathrm{x}}
+\color{#f42700}{\mathrm{y}}
+\color{#e94f00}{\mathrm{z}}$
