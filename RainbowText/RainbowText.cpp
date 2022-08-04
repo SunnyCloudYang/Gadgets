@@ -53,7 +53,7 @@ int main()
     }
     catch(const std::exception& e)
     {
-        std::cerr << e.what() << '\n';
+        std::cerr << e.what() << "\n\n";
         std::cout << "Sorry, seems that Chinese is not supported by this compiler." << "\n\n";
     }
 
@@ -151,10 +151,10 @@ void AddToCpy(wstring str)
         GlobalUnlock(hClip);
         SetClipboardData(CF_UNICODETEXT, hClip);
         CloseClipboard();
-        cout << "Already copied to the clipboard.";
+        cout << "Already copied to the clipboard." << endl;
     }
     else
     {
-        cout << "Failed to open clipboard, please copy it manually.";
+        cout << "Failed to open clipboard, please copy it manually." << endl;
     }
 }
