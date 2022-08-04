@@ -36,6 +36,7 @@ vector<wstring> colors = {L"#ff0000", L"#f42700", L"#e94f00", L"#dd7700",
 vector<wchar_t> esc_char = {' ', '\\', '{', '}', '#', '$', '%', '&', '_'};
 const wchar_t ctrl_char[2] = {'^', '~'};
 const int LINE_SIZE = 29;
+int ncolors = colors.size();
 
 wstring RainbowText(wstring origin_text, bool mathrm);
 void AddToCpy(wstring str);
@@ -106,8 +107,9 @@ wstring RainbowText(wstring origin_text, bool mathrm)
             rainbow_text += L"\\\\&";
         }
 
-        rainbow_text += PREFIX + colors[int(k * i + 0.5) % colors.size()] +
-                        JOINT + math_pref[mathrm];
+        rainbow_text += PREFIX
+                     + colors[(ncolors + int(k * i + 0.5) % ncolors) % ncolors] + JOINT
+                     + math_pref[mathrm];
 
         if (origin_text[i] == ctrl_char[0])
         {
