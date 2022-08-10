@@ -42,7 +42,7 @@ const int LINE_SIZE = 29;
 int ncolors = colors.size();
 
 wstring RainbowText(wstring origin_text, bool mathrm);
-void AddToCpy(wstring str);
+string AddToCpy(wstring str);
 
 int main()
 {
@@ -80,7 +80,7 @@ int main()
         cout << "----------Rainbow text code begin----------" << endl;
         wcout << rainbow_text << endl;
         cout << "-----------Rainbow text code end-----------" << endl;
-        AddToCpy(rainbow_text);
+        cout << AddToCpy(rainbow_text) << endl;
         cout << "\nYour text(Enter to exit): ";
         getline(wcin, origin_text);
     }
@@ -129,7 +129,7 @@ wstring RainbowText(wstring origin_text, bool mathrm)
     return rainbow_text;
 }
 
-void AddToCpy(wstring str)
+string AddToCpy(wstring str)
 {
     HGLOBAL hClip;
     if (OpenClipboard(NULL))
@@ -141,10 +141,10 @@ void AddToCpy(wstring str)
         GlobalUnlock(hClip);
         SetClipboardData(CF_UNICODETEXT, hClip);
         CloseClipboard();
-        cout << "Already copied to the clipboard." << endl;
+        return "Already copied to the clipboard.";
     }
     else
     {
-        cout << "Failed to open clipboard, please copy it manually." << endl;
+        return "Failed to open clipboard, please copy it manually.";
     }
 }
