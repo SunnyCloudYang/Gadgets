@@ -15,6 +15,7 @@
              1.6.4 adjust linefeed for Chinese characters
              1.6.5 optimized color change for wider characters
              1.6.6 ignored space at the beginning of a newline
+             1.6.7 add hyphen when a word is separated
 */
 #define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
@@ -25,7 +26,7 @@
 #include <windows.h>
 using namespace std;
 
-const string VERSION = "version 1.6.6";
+const string VERSION = "version 1.6.7";
 const wstring PREFIX = L"\\color{";
 const wstring JOINT = L"}{";
 const wstring postfix[2] = {L"}", L"}}"};
@@ -93,18 +94,18 @@ int main()
 
 wstring RainbowText(wstring origin_text, bool mathrm)
 {
-    const int STRLEN = origin_text.length();
+    int strLen = origin_text.length();
     wstring rainbow_text = L"$";
     float width = 0;
     int lines = 0;
-    float k = (STRLEN < colors.size() ? 16 * pow(STRLEN, -0.866) : 1);
+    float k = (strLen < colors.size() ? 16 * pow(strLen, -0.866) : 1);
 
-    if (STRLEN > LINE_SIZE)
+    if (strLen > LINE_SIZE)
     {
         rainbow_text += L"\\begin{aligned}\n&";
     }
 
-    for (int i = 0; i < STRLEN; i++)
+    for (int i = 0; i < strLen; i++)
     {
         if ((!(int(width + 0.5) % LINE_SIZE) 
             || int(width + 0.5) % LINE_SIZE == 1 
@@ -117,6 +118,11 @@ wstring RainbowText(wstring origin_text, bool mathrm)
             if (origin_text[i]==' ')
             {
                 continue;
+            }
+            if (isalpha(origin_text[i - 1]))
+            {
+                origin_text.insert(i, L"-");
+                strLen++;
             }
         }
 
@@ -149,7 +155,7 @@ wstring RainbowText(wstring origin_text, bool mathrm)
         }
     }
 
-    if (STRLEN > LINE_SIZE)
+    if (strLen > LINE_SIZE)
     {
         rainbow_text += L"\\end{aligned}\n";
     }
