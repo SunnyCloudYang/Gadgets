@@ -14,6 +14,7 @@
              1.6.3 optimized finder for escape chars
              1.6.4 adjust linefeed for Chinese characters
              1.6.5 optimized color change for wider characters
+             1.6.6 ignored space at the beginning of a newline
 */
 #define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
@@ -24,7 +25,7 @@
 #include <windows.h>
 using namespace std;
 
-const string VERSION = "version 1.6.5";
+const string VERSION = "version 1.6.6";
 const wstring PREFIX = L"\\color{";
 const wstring JOINT = L"}{";
 const wstring postfix[2] = {L"}", L"}}"};
@@ -37,7 +38,9 @@ vector<wstring> colors = {L"#ff0000", L"#f42700", L"#e94f00", L"#dd7700",
                           L"#6600f4", L"#9900ee", L"#cc00e9", L"#e900cc",
                           L"#ee0099", L"#f40066", L"#fa0033"};
 map<wchar_t, wstring> esc_char = {
-    {' ', L"\\ "}, {'\\', L"\\\\"}, {'{', L"\\{"}, {'}', L"\\}"}, {'#', L"\\#"}, {'$', L"\\$"}, {'%', L"\\%"}, {'&', L"\\&"}, {'_', L"\\_"}, {'^', L"\\wedge"}, {'~', L"\\sim"}};
+    {' ', L"\\ "}, {'\\', L"\\\\"}, {'{', L"\\{"}, {'}', L"\\}"}, 
+    {'#', L"\\#"}, {'$', L"\\$"}, {'%', L"\\%"}, {'&', L"\\&"}, 
+    {'_', L"\\_"}, {'^', L"\\wedge"}, {'~', L"\\sim"}};
 const int LINE_SIZE = 29;
 int ncolors = colors.size();
 
@@ -103,14 +106,24 @@ wstring RainbowText(wstring origin_text, bool mathrm)
 
     for (int i = 0; i < STRLEN; i++)
     {
-        if ((!(int(width + 0.5) % LINE_SIZE) || int(width + 0.5) % LINE_SIZE == LINE_SIZE - 1) && width > 1)
+        if ((!(int(width + 0.5) % LINE_SIZE) 
+            || int(width + 0.5) % LINE_SIZE == 1 
+            || int(width + 0.5) % LINE_SIZE == 2) 
+            && width > 5)
         {
             rainbow_text += L"\\\\&";
             width = 0;
             lines++;
+            if (origin_text[i]==' ')
+            {
+                continue;
+            }
         }
 
-        rainbow_text += PREFIX + colors[(ncolors + int(k * width + 2 * lines + 0.5) % ncolors) % ncolors] + JOINT + math_pref[mathrm];
+        rainbow_text += PREFIX 
+                    + colors[(ncolors + int(k * width + 1.8 * lines + 0.5) % ncolors) % ncolors] 
+                    + JOINT 
+                    + math_pref[mathrm];
 
         if (esc_char.find(origin_text[i]) != esc_char.end())
         {
@@ -132,7 +145,7 @@ wstring RainbowText(wstring origin_text, bool mathrm)
         }
         else
         {
-            width += 2;
+            width += 3;
         }
     }
 
