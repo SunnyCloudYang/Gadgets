@@ -12,6 +12,8 @@
              1.6.1 catch err when zn-CN.936 is not supported
              1.6.2 cancel copy confirm
              1.6.3 optimized finder for escape chars
+             1.6.4 adjust linefeed for Chinese characters
+             1.6.5 optimized color change for wider characters
 */
 #define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
@@ -22,7 +24,7 @@
 #include <windows.h>
 using namespace std;
 
-const string VERSION = "version 1.6.3";
+const string VERSION = "version 1.6.5";
 const wstring PREFIX = L"\\color{";
 const wstring JOINT = L"}{";
 const wstring postfix[2] = {L"}", L"}}"};
@@ -35,9 +37,7 @@ vector<wstring> colors = {L"#ff0000", L"#f42700", L"#e94f00", L"#dd7700",
                           L"#6600f4", L"#9900ee", L"#cc00e9", L"#e900cc",
                           L"#ee0099", L"#f40066", L"#fa0033"};
 map<wchar_t, wstring> esc_char = {
-    {' ', L"\\ "}, {'\\', L"\\\\"}, {'{', L"\\{"}, {'}', L"\\}"},
-    {'#', L"\\#"}, {'$', L"\\$"}, {'%', L"\\%"}, {'&', L"\\&"}, 
-    {'_', L"\\_"}, {'^', L"\\wedge"}, {'~', L"\\sim"}};
+    {' ', L"\\ "}, {'\\', L"\\\\"}, {'{', L"\\{"}, {'}', L"\\}"}, {'#', L"\\#"}, {'$', L"\\$"}, {'%', L"\\%"}, {'&', L"\\&"}, {'_', L"\\_"}, {'^', L"\\wedge"}, {'~', L"\\sim"}};
 const int LINE_SIZE = 29;
 int ncolors = colors.size();
 
@@ -57,7 +57,8 @@ int main()
     catch (const std::exception &e)
     {
         std::cerr << e.what() << "\n\n";
-        std::cout << "Sorry, seems that Chinese is not supported by this compiler."<< "\n\n";
+        std::cout << "Sorry, seems that Chinese is not supported by this compiler."
+                  << "\n\n";
     }
 
     wstring origin_text;
@@ -91,7 +92,8 @@ wstring RainbowText(wstring origin_text, bool mathrm)
 {
     const int STRLEN = origin_text.length();
     wstring rainbow_text = L"$";
-
+    float width = 0;
+    int lines = 0;
     float k = (STRLEN < colors.size() ? 16 * pow(STRLEN, -0.866) : 1);
 
     if (STRLEN > LINE_SIZE)
@@ -101,15 +103,14 @@ wstring RainbowText(wstring origin_text, bool mathrm)
 
     for (int i = 0; i < STRLEN; i++)
     {
-        if (!(i % LINE_SIZE) && i != 0)
+        if ((!(int(width + 0.5) % LINE_SIZE) || int(width + 0.5) % LINE_SIZE == LINE_SIZE - 1) && width > 1)
         {
             rainbow_text += L"\\\\&";
+            width = 0;
+            lines++;
         }
 
-        rainbow_text += PREFIX
-                      + colors[(ncolors + int(k * i + 0.5) % ncolors) % ncolors]
-                      + JOINT
-                      + math_pref[mathrm];
+        rainbow_text += PREFIX + colors[(ncolors + int(k * width + 2 * lines + 0.5) % ncolors) % ncolors] + JOINT + math_pref[mathrm];
 
         if (esc_char.find(origin_text[i]) != esc_char.end())
         {
@@ -119,6 +120,20 @@ wstring RainbowText(wstring origin_text, bool mathrm)
             rainbow_text += origin_text[i];
 
         rainbow_text += postfix[mathrm] + L"\n";
+        if (isalnum(origin_text[i]) || ispunct(origin_text[i]))
+        {
+            width += 1;
+            if (isupper(origin_text[i]) || origin_text[i] == '@' 
+               || origin_text[i] == '#' || origin_text[i] == '%' 
+               || origin_text[i] == '<' || origin_text[i] == '>')
+            {
+                width += 0.5;
+            }
+        }
+        else
+        {
+            width += 2;
+        }
     }
 
     if (STRLEN > LINE_SIZE)
@@ -136,7 +151,7 @@ string AddToCpy(wstring str)
     {
         EmptyClipboard(); // relax, it won't clear all, just current content
         hClip = GlobalAlloc(GMEM_MOVEABLE, (str.length() + 1) * sizeof(wchar_t));
-        wchar_t* buff = (wchar_t *)GlobalLock(hClip);
+        wchar_t *buff = (wchar_t *)GlobalLock(hClip);
         wcscpy(buff, str.c_str());
         GlobalUnlock(hClip);
         SetClipboardData(CF_UNICODETEXT, hClip);
