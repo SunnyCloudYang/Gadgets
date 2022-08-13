@@ -35,9 +35,9 @@
 \color{#fa0033}{\mathrm{颜}}
 \color{#ff0000}{\mathrm{色}}
 \color{#f42700}{\mathrm{L}}
-\color{#e94f00}{\mathrm{a}}
+^{\color{#e94f00}{\mathrm{A}}}
 \color{#dd7700}{\mathrm{T}}
-\color{#d29f00}{\mathrm{e}}
+_{\color{#d29f00}{\mathrm{E}}}
 \color{#b6b800}{\mathrm{X}}
 \color{#88c400}{\mathrm{格}}
 \color{#5bcf00}{\mathrm{式}}
