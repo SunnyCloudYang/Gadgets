@@ -16,6 +16,7 @@
              1.6.5 optimized color change for wider characters
              1.6.6 ignored space at the beginning of a newline
              1.6.7 add hyphen when a word is separated
+             1.6.8 use newcmd \\a instead of long origin cmd \\color{...}
 */
 #define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
@@ -26,8 +27,10 @@
 #include <windows.h>
 using namespace std;
 
-const string VERSION = "version 1.6.7";
-const wstring PREFIX = L"\\color{";
+const string VERSION = "version 1.6.8";
+const wstring NEWCMD[2] = {L"\\newcommand{\\a}[2]{\\color{#1}{#2}}", 
+                          L"\\newcommand{\\a}[2]{\\color{#1}{\\mathrm{#2}}}"};
+const wstring PREFIX = L"\\a{";
 const wstring JOINT = L"}{";
 const wstring postfix[2] = {L"}", L"}}"};
 const wstring math_pref[2] = {L"", L"\\mathrm{"};
@@ -95,7 +98,7 @@ int main()
 wstring RainbowText(wstring origin_text, bool mathrm)
 {
     int strLen = origin_text.length();
-    wstring rainbow_text = L"$";
+    wstring rainbow_text = L"$" + NEWCMD[mathrm] + L'\n';
     float width = 0;
     int lines = 0;
     float k = (strLen < colors.size() ? 16 * pow(strLen, -0.866) : 1);
@@ -115,7 +118,7 @@ wstring RainbowText(wstring origin_text, bool mathrm)
             rainbow_text += L"\\\\&";
             width = 0;
             lines++;
-            if (origin_text[i]==' ')
+            if (origin_text[i] == ' ')
             {
                 continue;
             }
@@ -128,8 +131,7 @@ wstring RainbowText(wstring origin_text, bool mathrm)
 
         rainbow_text += PREFIX 
                     + colors[(ncolors + int(k * width + 1.8 * lines + 0.5) % ncolors) % ncolors] 
-                    + JOINT 
-                    + math_pref[mathrm];
+                    + JOINT;
 
         if (esc_char.find(origin_text[i]) != esc_char.end())
         {
@@ -138,7 +140,7 @@ wstring RainbowText(wstring origin_text, bool mathrm)
         else
             rainbow_text += origin_text[i];
 
-        rainbow_text += postfix[mathrm] + L"\n";
+        rainbow_text += L"}\n";
         if (isalnum(origin_text[i]) || ispunct(origin_text[i]))
         {
             width += 1;
