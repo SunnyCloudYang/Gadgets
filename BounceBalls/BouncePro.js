@@ -213,7 +213,8 @@ class Ball {
                         balls_valumn[i].x + small_root * balls_valumn[i].velX;
                     let collide_Y2 =
                         balls_valumn[i].y + small_root * balls_valumn[i].velY;
-                    if (collide_Y1 - collide_Y2 === 0) collide_Y1 = collide_Y2 + 0.00001;
+                    if (collide_Y1 - collide_Y2 === 0)
+                        collide_Y1 = collide_Y2 + 0.00001;
                     let theta = correct_angle(
                         Math.atan((collide_X1 - collide_X2) / (collide_Y1 - collide_Y2))
                     );
@@ -222,22 +223,18 @@ class Ball {
                     let sin_theta = Math.sin(theta);
                     let cos_theta = Math.cos(theta);
                     let v11 = vx * cos_theta + vy * sin_theta;
-                    let v12 = -vx * sin_theta + vy * cos_theta;
+                    let v12 = (-vx) * sin_theta + vy * cos_theta;
                     let vx2 = -balls_valumn[i].velX;
                     let vy2 = -balls_valumn[i].velY;
                     let v21 = vx2 * cos_theta + vy2 * sin_theta;
-                    let v22 = -vx2 * sin_theta + vy2 * cos_theta;
+                    let v22 = (-vx2) * sin_theta + vy2 * cos_theta;
 
                     if (eating_mode === 0 || this.radius - balls_valumn[i].radius < 10) {
-                        this.velX =
-                            -v11 * cos_theta -
-                            (sin_theta *
+                        this.velX = -v11 * cos_theta - (sin_theta *
                                 ((this.mess - balls_valumn[i].mess) * v12 +
                                     2 * balls_valumn[i].mess * v22)) /
                             (this.mess + balls_valumn[i].mess);
-                        this.velY =
-                            -v11 * sin_theta +
-                            (cos_theta *
+                        this.velY = -v11 * sin_theta + (cos_theta *
                                 ((this.mess - balls_valumn[i].mess) * v12 +
                                     2 * balls_valumn[i].mess * v22)) /
                             (this.mess + balls_valumn[i].mess);
