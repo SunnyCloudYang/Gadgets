@@ -215,9 +215,8 @@ class Ball {
                         balls_valumn[i].y + small_root * balls_valumn[i].velY;
                     if (collide_Y1 - collide_Y2 === 0)
                         collide_Y1 = collide_Y2 + 0.00001;
-                    let theta = correct_angle(
-                        Math.atan((collide_X1 - collide_X2) / (collide_Y1 - collide_Y2))
-                    );
+                    let theta = correct_angle(Math.atan(
+                        (collide_X1 - collide_X2) / (collide_Y1 - collide_Y2)));
                     let vx = -this.velX;
                     let vy = -this.velY;
                     let sin_theta = Math.sin(theta);
@@ -328,7 +327,8 @@ function getEventPosition(ev) {
 } //choose
 
 function correct_angle(angle) {
-    if (angle < 0) angle += Math.PI;
+    if (angle < 0)
+        angle += Math.PI;
     return angle;
 }
 
@@ -419,23 +419,20 @@ function draw_rect() {
     else if (night_mode === 1) ctx.fillStyle = "rgba(40,40,60,0.2)";
     else if (circulate === 1)
         ctx.fillStyle =
-            "rgba(" +
-            dark_degree +
-            "," +
-            dark_degree +
-            "," +
-            dark_degree +
-            "," +
-            ((0.6 * dark_degree) / 255 + 0.03 * v) +
-            ")";
+            "rgba(" + dark_degree + ","
+            + dark_degree + ","
+            + dark_degree + ","
+            + ((0.6 * dark_degree) / 255 + 0.03 * v) + ")";
     ctx.fillRect(0, 0, width, height);
     if (circulate === 1) {
         dark_degree += delta;
-        if (dark_degree > 276) delta = -delta;
-        else if (dark_degree < -20) delta = Math.abs(delta);
+        if (dark_degree > 276)
+            delta = -delta;
+        else if (dark_degree < -20)
+            delta = Math.abs(delta);
     }
 }
-let summing_flag = 0;
+
 function moving_loop() {
     draw_rect();
     for (var i = 0; i < cnt; i++) {
@@ -446,16 +443,13 @@ function moving_loop() {
     }
     for (var i = 0; i < cnt; i++) {
         balls_valumn[i].update();
-    }
-    for (var i = 0; i < cnt; i++) {
         balls_valumn[i].draw();
     }
     myCanvas.onmousedown = myCanvas.ontouchstart = choose_this_ball;
-    summing_flag = (summing_flag + 1) % 30; //为了降低刷新速率，引入flag使其每30个循环统计一次
-    if (summing_flag == 0) {
+    setInterval(() => {
         cnt_of_balls_now.innerHTML = "Number of balls now: "
-                                   + sum_the_cnt_of_balls();
-    }
+            + sum_the_cnt_of_balls();
+    }, 200);
     requestAnimationFrame(moving_loop);
 }
 moving_loop();
