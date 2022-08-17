@@ -18,6 +18,7 @@ let dark_degree = 0;
 let recovery = 1;
 let circulate = 0;
 let night_mode = 1; //default mode
+let fuzzy = 0.3;
 let day_mode = 0;
 let universe_mode = 0;
 let gravity = 0;
@@ -345,9 +346,9 @@ function new_balls(amount) {
 }
 function draw_rect() {
     if (day_mode)
-        ctx.fillStyle = "rgba(255,255,230,0.9)";
+        ctx.fillStyle = "rgba(255,255,230," + (0.55 + fuzzy) + ")";
     else if (night_mode)
-        ctx.fillStyle = "rgba(40,40,60,0.2)";
+        ctx.fillStyle = "rgba(40,40,60," + (0.55 + fuzzy) + ")";
     else if (circulate)
         ctx.fillStyle =
             "rgba(" + dark_degree + ","
