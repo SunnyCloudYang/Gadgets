@@ -1,7 +1,8 @@
 chrome.storage.sync.get(['autoReload'], ({ autoReload }) => {
     if (autoReload) {
         console.log("Auto-reload: Auto reload is running");
-        let cnt = 0;
+        let cnt = 0;            //count reload times
+        let interv = 1500;      //time interval of checking page
         let exist = setInterval(() => {
 
             if (document.getElementsByClassName("box").length) {
@@ -30,7 +31,7 @@ chrome.storage.sync.get(['autoReload'], ({ autoReload }) => {
                     console.log("Auto-reload: Page loaded, auto-reload stops working.");
                 }
             }
-        }, 1500);
+        }, interv);
     }
 });
 
