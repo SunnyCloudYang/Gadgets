@@ -4,8 +4,8 @@ let myCanvas = document.getElementById("myCanvas");
 let change_amount = document.getElementById("balls_amount");
 const ctx = cans.getContext("2d");
 let cnt_of_balls_now = document.getElementById("cnt");
-let width = (cans.width = window.innerWidth - 20);
-let height = (cans.height = window.innerHeight - 30);
+let width = cans.width = window.innerWidth - 20;
+let height = cans.height = window.innerHeight - 30;
 let balls_valumn = [];
 let number_of_balls = 100; //在这里修改出现球的总数
 let v = 3; //在这里修改生成球速度的范围[-v,v];
@@ -269,10 +269,6 @@ function getEventPosition(ev) {
     return { x: ev.layerX, y: ev.layerY };
 } //choose
 
-function correct_angle(angle) {
-    return angle < 0 ? angle + Math.PI : angle;
-}
-
 function get_amount() {
     //adjust the number of balls
     let new_number = document.getElementById("number").value;
@@ -289,18 +285,7 @@ function get_amount() {
         alert("Invalid number! Must be less than 500 and not null.");
 }
 
-function root_solution(a, b, c) {
-    //一元二次方程求根公式 Assume that a > 0
-    if (b * b - 4 * a * c >= 0) {
-        let small_root = (-b - Math.sqrt(b * b - 4 * a * c)) / (2 * a);
-        if (small_root > 0 && small_root < 3)
-            return small_root;
-    }
-    return 0;
-}
-
 function sum_the_cnt_of_balls() {
-    //统计现在屏幕上的球数 (作者太菜，有时球会莫名其妙地减少)
     cnt = number_of_balls;
     for (var i = 0; i < cnt; i++)
         if (
@@ -384,7 +369,6 @@ for (var i = 0; i < number_of_balls; i++) {
 setInterval(() => {
     cnt_of_balls_now.innerHTML = "Number of balls now: "
         + sum_the_cnt_of_balls();
-    console.log("summing...");
 }, 250);
 myCanvas.onmousedown = myCanvas.ontouchstart = choose_this_ball;
 document.getElementById("number").onkeydown = function (ev) {
