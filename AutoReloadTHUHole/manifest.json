@@ -1,7 +1,7 @@
 {
     "name": "THU-Hole Reloader",
     "description": "Auto reload when thu-hollow failed to fetch",
-    "version": "2.0.0",
+    "version": "3.0.0",
     "manifest_version": 3,
     "permissions": ["storage"],
     "background": {
@@ -25,7 +25,10 @@
     },
     "content_scripts": [
         {
-            "matches": ["https://thuhollow.github.io/?"],
+            "matches": [
+                "https://thuhollow.github.io/?", 
+                "https://bbs.pku.edu.cn/v2/home.php"
+            ],
             "js": ["./js/content_script.js"],
             "run_at": "document_idle"
         }

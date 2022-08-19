@@ -46,3 +46,16 @@ function Reload() {
     else
         return false;
 }
+
+let cnt = 0;
+let intcpt = setInterval(() => {
+    let wrapper;
+    cnt++;
+    cnt > 5 ? clearInterval(intcpt) : wrapper = document.getElementsByClassName("bdwm-dialog-wrapper bdwm-dialog-wrapper-background");
+    if (wrapper.length) {
+        wrapper[0].setAttribute("style", "display:none");
+        console.log("intercept welcome page");
+        clearInterval(intcpt);
+    }
+}, 1000);
+
