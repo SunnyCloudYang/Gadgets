@@ -52,7 +52,7 @@ let intcpt = setInterval(() => {
     let wrapper;
     cnt++;
     cnt > 5 ? clearInterval(intcpt) : wrapper = document.getElementsByClassName("bdwm-dialog-wrapper bdwm-dialog-wrapper-background");
-    if (wrapper.length) {
+    if (wrapper && wrapper.length) {
         wrapper[0].setAttribute("style", "display:none");
         console.log("intercept welcome page");
         clearInterval(intcpt);
