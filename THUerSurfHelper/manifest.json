@@ -1,7 +1,7 @@
 {
     "name": "THUer Surf Helper",
-    "description": "Help THUers when surfing in THU-Hole, 1911 planet and PKU-BBS",
-    "version": "1.0.0",
+    "description": "Help THUers when surfing in t-hole, 1911 planet, PKU-BBS, Bing and Course registration",
+    "version": "1.5.3",
     "manifest_version": 3,
     "permissions": ["storage"],
     "background": {
@@ -27,7 +27,9 @@
             "matches": ["https://t-hole.github.io/",
                         "https://t-hole.github.io/*",
                         "https://planet.tsinghua.edu.cn/member.php*",
-                        "https://bbs.pku.edu.cn/*"],
+                        "https://bbs.pku.edu.cn/*",
+                        "https://cn.bing.com/",
+                        "https://zhjwxk.cic.tsinghua.edu.cn/xklogin.do*"],
             "js": ["./js/content_script.js"],
             "run_at": "document_idle"
         }
