@@ -6,8 +6,7 @@
 
 ## 目录
 
-* $
-\color{#b6b800}{\mathrm{R}}
+* $\color{#b6b800}{\mathrm{R}}
 \color{#88c400}{\mathrm{a}}
 \color{#5bcf00}{\mathrm{i}}
 \color{#2ddb00}{\mathrm{n}}
